@@ -1,11 +1,11 @@
 ﻿@page "/"
 @inject IJSRuntime _js
-
+@inject ISnackbar _Snackbar;
 
 <PageTitle>Index</PageTitle>
 
 
-
+<MudTextField @bind-Value="SystemText" Lines="5"/>
 <MudInput T="int" @bind-Value="@BPM"/>
 
 <MudTextField T="string" Variant="Variant.Outlined" @bind-Text="@ABCText" Lines="5"/>
@@ -42,18 +42,29 @@
         }
     }
 
-    private MusicSystem musicSystem = new (
-        new ChordProgressionStateGenerator(new KeyMode(Tone.C, Mode: Mode.Major.Instance),
-            new List<int>() { 1, 3, 6, 2, 5, 1 }
-            ),
-        new List<(Voice Voice, IMelodyGenerator MelodyGenerator)>()
-        {
-            (Voices.Piano, new BrainMelodyGenerator(FixedRhythmGenerator.CreateFrom(3, 3, 2),
-                new ArpeggioClusterGenerator(3, true, 3, 2)
-                ))
-        }
+    private const string defaultSystemText = "Chords C Major 1, 4, 5, 1;voice 'bass' 33 rhy 3, 3, 2 arp 3 asc 3 1;voice 'piano' 5 rhy 1 block 5 1 2";
+    private string _systemText = defaultSystemText;
 
-        );
+    public string SystemText
+    {
+        get { return _systemText; }
+        set
+        {
+            _systemText = value;
+            var musicSystemResult = Parser.Parse(_systemText);
+            if (musicSystemResult.IsSuccess)
+            {
+                musicSystem = musicSystemResult.Value;
+                SetOutputJson();
+            }
+            else
+            {
+                _Snackbar.Add(musicSystemResult.Error, Severity.Error);
+            }
+        }
+    }
+
+    private MusicSystem musicSystem = Parser.Parse(defaultSystemText).Value;
 
     private void SetOutputJson()
     {
