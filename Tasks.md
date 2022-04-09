@@ -1,0 +1,14 @@
+- [ ] Flux
+- [ ] Github
+- [ ] Control Voices / Instruments
+- [ ] Control Time Signature
+- [ ] Control Mode
+- [ ] Control letter-> Tone mapping - Nursery Time / Radio Friendly / Jazz me up / Schoenberg or bust / Custom
+- [ ] Control word -> rhythm converter
+- [ ] Detect full stops and commas
+- [ ] Detect title
+- [ ] Styles should have access to more information when choosing notes
+- [ ] More styles
+- [ ] Chord Symbols
+- [ ] Drums
+- [ ] Text to speech https://zolomohan.com/text-to-speech/

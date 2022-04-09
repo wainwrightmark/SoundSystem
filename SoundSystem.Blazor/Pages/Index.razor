@@ -1,0 +1,112 @@
+﻿@page "/"
+@inject IJSRuntime _js
+
+
+<PageTitle>Index</PageTitle>
+
+
+
+<MudInput T="int" @bind-Value="@BPM"/>
+
+<MudTextField T="string" Variant="Variant.Outlined" @bind-Text="@ABCText" Lines="5"/>
+
+
+<MudButton OnClick="Play">Play</MudButton>
+
+<div class="container">
+    <div id="paper"></div>
+</div>
+
+
+@code{
+
+    
+    
+    private int _bpm = 100;
+
+    private Tone _keyTone = Tone.C;
+
+    public Tone KeyTone
+    {
+        get => _keyTone;
+        set => _keyTone = value;
+    }
+
+    public int BPM
+    {
+        get => _bpm;
+        set
+        {
+            _bpm = value;
+            SetOutputJson();
+        }
+    }
+
+    private MusicSystem musicSystem = new (
+        new ChordProgressionStateGenerator(new KeyMode(Tone.C, Mode: Mode.Major.Instance),
+            new List<int>() { 1, 3, 6, 2, 5, 1 }
+            ),
+        new List<(Voice Voice, IMelodyGenerator MelodyGenerator)>()
+        {
+            (Voices.Piano, new BrainMelodyGenerator(FixedRhythmGenerator.CreateFrom(3, 3, 2),
+                new ArpeggioClusterGenerator(3, true, 3, 2)
+                ))
+        }
+
+        );
+
+    private void SetOutputJson()
+    {
+        ABCText = musicSystem.ToABC("My Song", 12, BPM);
+    //ABCText =  ConvertToAbc.Convert(_inputText, _bpm, new KeyMode(_keyTone, Mode.Major.Instance), _pronunciationEngine.Value, Voices);
+    }
+    
+
+    /// <inheritdoc />
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (firstRender)
+        {
+            await _js.InvokeVoidAsync("load", ABCText);
+        }
+    }
+
+    /// <inheritdoc />
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        SetOutputJson();
+    }
+
+    private string _abcText;
+
+    public string ABCText
+    {
+        get => _abcText;
+        set
+        {
+            _abcText = value;
+            _js.InvokeVoidAsync("load", value);
+        }
+    }
+
+    public async Task Play()
+    {
+        await _js.InvokeVoidAsync("play");
+    }
+
+    private double _animatedTime = 0;
+
+    private MudTextField<string> inputTextReference;
+
+
+    [JSInvokable("AnimateTime")]
+    public ValueTask AnimateTime(double time)
+    {
+        var pos1 = Convert.ToInt32((time * 2 - 1) * 5);
+        return inputTextReference.SelectRangeAsync(pos1, pos1 + 5);
+    }
+
+}
