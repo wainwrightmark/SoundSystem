@@ -27,8 +27,8 @@
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-+vVdIj7neJ+ihLFR+qU3xbNhxbIyjk4IHvJiJ3reJOs=",
       "MudBlazor.dll": "sha256-NMICktneuEAwnpIMXYRLyze23\/W40SaFOSVhLrvfjng=",
       "netstandard.dll": "sha256-+8T9cQVxJ1k5smlqa6vwtbquAenRidXG53z+z7hu5ts=",
-      "SoundSystem.Blazor.dll": "sha256-Xp2y70P3V401a+ZrrjfXJLFgHO1JRNIhs1T1zhdaJxc=",
-      "SoundSystem.dll": "sha256-LHWKdvi91y6HmQJfhjbs3quSBf1LRO5D9UC37MJlgZQ=",
+      "SoundSystem.Blazor.dll": "sha256-wmsr9IUegUSv7W8ZDZa17yFtqT75oU8JPyxCRhvnvs0=",
+      "SoundSystem.dll": "sha256-xCZ+ITMnSfk3Pwc5k1JlgQBlK3ozNOnXfttdzAZ+7\/s=",
       "Superpower.dll": "sha256-zlnNM6KkPDirHyihj66n4jg5WQ59iPcnYEqD0rpyJAE=",
       "System.Collections.Concurrent.dll": "sha256-AROZfhUed7MKRQonpobtEee\/8nRenzG5BgQO6L6BCQc=",
       "System.Collections.dll": "sha256-vI82NohajksBQlg4QPFb4V+8glDKZOzQDtJCsBEjX44=",
@@ -66,8 +66,8 @@
     "libraryInitializers": null,
     "pdb": null,
     "runtime": {
-      "dotnet.6.0.3.jlthdrpds4.js": "sha256-JFoZvMSWAwqHMB36kj7DD5TRYnG6RgDjX3sT\/XtYWnI=",
-      "dotnet.wasm": "sha256-1A+tBJwU4jqg4fLhzViTv\/Iy8ikhM6W86MGL8T\/4uw0="
+      "dotnet.6.0.3.jlthdrpds4.js": "sha256-4x5646Aax4QYV+3HYgKj+cKplGJbM0S7ExnSzoOS0dg=",
+      "dotnet.wasm": "sha256-Xtye\/v376yNC64Vs+elNETzcqisK6M6RsN7IC0m16hs="
     },
     "satelliteResources": null
   }
