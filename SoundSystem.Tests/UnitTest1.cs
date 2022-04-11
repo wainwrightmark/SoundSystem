@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -13,16 +12,18 @@ public class UnitTest1
         _testOutputHelper = testOutputHelper;
     }
 
+    public const string Text =
+        @"Title 'Song' Bars 12 BPM 120 Chords C Major [1 4 5 1]
+voice 'bass' -2 33 rhy [3 3 2] arp 3 asc 3 1
+voice 'piano' 0 5 rhy [3 1] block 5 1 2";
+
     [Fact]
-    public void Test1()
+    public void TestParser()
     {
-        var text = 
-            "Chords C Major 1, 4, 5, 1;voice 'bass' 33 rhy 3, 3, 2 arp 3 asc 1 1";
-
-
-         var r = Parser.Parse(text);
+        var r = Parser.Parse(Text);
 
          if(!r.IsSuccess)
             r.IsSuccess.Should().BeTrue(r.Error);
     }
+    
 }

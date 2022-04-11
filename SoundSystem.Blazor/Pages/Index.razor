@@ -6,7 +6,6 @@
 
 
 <MudTextField @bind-Value="SystemText" Lines="5"/>
-<MudInput T="int" @bind-Value="@BPM"/>
 
 <MudTextField T="string" Variant="Variant.Outlined" @bind-Text="@ABCText" Lines="5"/>
 
@@ -20,29 +19,12 @@
 
 @code{
 
-    
-    
-    private int _bpm = 100;
+    private const string defaultSystemText = @"Title 'Song' Bars 12 BPM 120 Chords C Major [1 4 5 1]
+voice 'piano' 0 5 rhy [3 1] block 5 1 2
+voice 'bass' -2 33 rhy [3 3 2] arp 3 asc 3 1
+voice 'guitar' 0 28 rhy [1 1 1 1] arp 5 asc 4 1
 
-    private Tone _keyTone = Tone.C;
-
-    public Tone KeyTone
-    {
-        get => _keyTone;
-        set => _keyTone = value;
-    }
-
-    public int BPM
-    {
-        get => _bpm;
-        set
-        {
-            _bpm = value;
-            SetOutputJson();
-        }
-    }
-
-    private const string defaultSystemText = "Chords C Major 1, 4, 5, 1;voice 'bass' 33 rhy 3, 3, 2 arp 3 asc 3 1;voice 'piano' 5 rhy 1 block 5 1 2";
+";
     private string _systemText = defaultSystemText;
 
     public string SystemText
@@ -68,7 +50,7 @@
 
     private void SetOutputJson()
     {
-        ABCText = musicSystem.ToABC("My Song", 12, BPM);
+        ABCText = musicSystem.ToABC();
     //ABCText =  ConvertToAbc.Convert(_inputText, _bpm, new KeyMode(_keyTone, Mode.Major.Instance), _pronunciationEngine.Value, Voices);
     }
     

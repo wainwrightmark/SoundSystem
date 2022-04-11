@@ -10,6 +10,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoundSystem", "SoundSystem\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9FFC08FD-2CC9-4311-B0F4-C63F0E6B57C2}"
 	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 		Tasks.md = Tasks.md
 	EndProjectSection
 EndProject
@@ -23,10 +24,6 @@ Global
 		{30148A3F-1FE0-4697-8145-0C3743F91A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30148A3F-1FE0-4697-8145-0C3743F91A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30148A3F-1FE0-4697-8145-0C3743F91A41}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A9443707-F4F3-4A4C-8134-AC213BE8C9A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A9443707-F4F3-4A4C-8134-AC213BE8C9A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A9443707-F4F3-4A4C-8134-AC213BE8C9A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A9443707-F4F3-4A4C-8134-AC213BE8C9A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{483AD15B-BFA3-4BD5-837B-82A26D46431D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{483AD15B-BFA3-4BD5-837B-82A26D46431D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{483AD15B-BFA3-4BD5-837B-82A26D46431D}.Release|Any CPU.ActiveCfg = Release|Any CPU

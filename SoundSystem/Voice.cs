@@ -1,23 +1,29 @@
 ﻿namespace SoundSystem;
 
-public sealed record Voice(string Id, string Name, string ShortName, string Clef, int GroupNumber, int GeneralMidiVoice)
+public sealed record Voice(string Name, int Transpose, int GeneralMidiVoice)
 {
-    /// <summary>
-    /// Voices will be grouped by their voice number
-    /// </summary>
-    public int GroupNumber { get;init; } = GroupNumber;
 
+    private string TransposeTerm()
+    {
+        return Transpose switch
+        {
+            0 => "B",
+            > 0 => "B" + new string('\'', Transpose),
+            _ => "B" + new string(',', Math.Abs(Transpose))
+        };
+    }
 
-    public string ABCHeader => $"V:{Id} clef={Clef} name=\"{Name}\" snm=\"{ShortName}\"";
+    public string ABCHeader => $"V:{Name} clef=treble, middle={TransposeTerm()} name=\"{Name}\" snm=\"{Name}\"";
 }
 
 
 public static class Voices
 {
-    public static Voice Bass { get; } = new ("Bs", "Bass", "Bs", "bass-8", 3,33);
-    public static Voice Piano { get; } = new ("Pf", "Piano", "Pf", "treble", 2,5);
-    public static Voice Tenor { get; } = new ("T1", "Tenor", "T1", "treble", 2,55);
-    public static Voice Pad { get; } = new ("Pd", "Pad", "Pd", "treble", 2,91);
+    public static Voice Bass { get; } = new ("Bass", -2, 33);
+    public static Voice Piano { get; } = new ("Piano", 0,5);
+    public static Voice Tenor { get; } = new ("Tenor",  0,55);
+    public static Voice Guitar { get; } = new ("Guitar", 0,29);
+    public static Voice Pad { get; } = new ("Pad" , 1,91);
 
     //TODO other voices
 }

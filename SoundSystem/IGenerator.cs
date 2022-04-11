@@ -41,7 +41,7 @@ public partial record ChordProgressionStateGenerator(KeyMode KeyMode, IReadOnlyL
     public BarMetadata Next(int input, Maybe<BarMetadata> previous)
     {
         var rootInterval = RootIntervals[input % RootIntervals.Count];
-        var interval = KeyMode.Mode.Intervals[rootInterval];
+        var interval = KeyMode.Mode.Intervals[rootInterval - 1];
         var tone = KeyMode.Root.Transpose(interval);
 
         var chord = KeyMode.GetChordType(new HashSet<Tone>(){tone});

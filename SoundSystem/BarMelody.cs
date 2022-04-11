@@ -27,7 +27,7 @@ public partial record BarMelody([property:OrderedEquality]IReadOnlyList<Cluster>
                     //Enter a triplet
                     tupletIndex++;
                     sb.Append("(3");
-                    var nt = term with { NoteLength = new NoteLength(term.NoteLength.NinetySixths * 3) };
+                    var nt = term with { NoteLength = new NoteLength((term.NoteLength.NinetySixths * 3) / 2) };
                     sb.Append(nt.ABCName());
                 }
                 else
@@ -37,7 +37,7 @@ public partial record BarMelody([property:OrderedEquality]IReadOnlyList<Cluster>
             }
             else
             {
-                var nt = term with { NoteLength = new NoteLength(term.NoteLength.NinetySixths * 3) };
+                var nt = term with { NoteLength = new NoteLength((term.NoteLength.NinetySixths * 3) /2) };
                 sb.Append(nt.ABCName());
                 tupletIndex++;
                 if (tupletIndex == 3) tupletIndex = 0;

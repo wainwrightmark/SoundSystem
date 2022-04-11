@@ -36,8 +36,8 @@ public sealed record Chord(string Name, string Symbol,  Tone Root, Tone Fifth, T
             var c = 3;
             if(Seventh is not null) c++;
             if(Ninth is not null) c++;
-            if(Thirteenth is not null) c++;
             if(Eleventh is not null) c++;
+            if(Thirteenth is not null) c++;
             return c;
         }
 
@@ -49,12 +49,14 @@ public sealed record Chord(string Name, string Symbol,  Tone Root, Tone Fifth, T
         get
         {
             yield return Root;
-            yield return Fifth;
             yield return Third;
+            yield return Fifth;
+            
             if(Seventh is not null) yield return Seventh.Value;
             if(Ninth is not null) yield return Ninth.Value;
-            if(Thirteenth is not null) yield return Thirteenth.Value;
             if(Eleventh is not null) yield return Eleventh.Value;
+            if(Thirteenth is not null) yield return Thirteenth.Value;
+            
         }
     }
 

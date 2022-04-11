@@ -16,7 +16,10 @@ public static class Parser
         Identifier,
         Word,
         Integer,
-        Semicolon
+        Semicolon,
+        ArrayOpen,
+        ArrayClose,
+
 
     }
 
@@ -24,12 +27,12 @@ public static class Parser
     public static CSharpFunctionalExtensions. Result<MusicSystem> Parse(string text)
     {
         var t = Tokenizer.TryTokenize(text);
-        if(!t.HasValue)return  CSharpFunctionalExtensions.Result.Failure<MusicSystem>(t.FormatErrorMessageFragment());
+        if(!t.HasValue)return  Result.Failure<MusicSystem>(t.FormatErrorMessageFragment());
 
 
         var p  = MusicSystemParser.TryParse(t.Value);
 
-        if(!p.HasValue)return  CSharpFunctionalExtensions.Result.Failure<MusicSystem>(p.FormatErrorMessageFragment());
+        if(!p.HasValue)return  Result.Failure<MusicSystem>(p.FormatErrorMessageFragment());
 
         return p.Value;
     }
@@ -38,17 +41,21 @@ public static class Parser
         .Match(Character.EqualTo(';'), SoundSystemToken.Semicolon)
         .Ignore(Span.WhiteSpace)
         .Ignore(Comment.ShellStyle)
-        .Match(Numerics.Natural, SoundSystemToken.Integer, true)
+        .Match(Numerics.Integer, SoundSystemToken.Integer, true)
         .Match(Character.EqualTo(','), SoundSystemToken.Comma, false)
+        .Match(Character.EqualTo('['), SoundSystemToken.ArrayOpen, false)
+        .Match(Character.EqualTo(']'), SoundSystemToken.ArrayClose, false)
         .Match(Span.Regex("[A-G][b]?"), SoundSystemToken.Tone, true)
         .Match(Identifier.CStyle, SoundSystemToken.Identifier, true)
         .Match(QuotedString.SqlStyle, SoundSystemToken.Word, false).Build();
 
     public static readonly TokenListParser<SoundSystemToken, List<int>> IntList =
-        (from l in Token.EqualTo(SoundSystemToken.Integer)
-                .ManyDelimitedBy(Token.EqualTo(SoundSystemToken.Comma))
+            from open in Token.EqualTo(SoundSystemToken.ArrayOpen)
+            from l in Token.EqualTo(SoundSystemToken.Integer)
+                .Many()
+            from close in Token.EqualTo(SoundSystemToken.ArrayClose)
             select l.Select(t => t.ParseAsInt()).ToList()
-        );
+        ;
 
     public static readonly TokenListParser<SoundSystemToken, IClusterGenerator> ArpeggioClusterGenerator =
     (
@@ -90,8 +97,10 @@ public static class Parser
     (
         from _ in Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "Voice")
         from name in Token.EqualTo(SoundSystemToken.Word)
+        from transpose in Token.EqualTo(SoundSystemToken.Integer)
         from gmv in Token.EqualTo(SoundSystemToken.Integer)
-        select new Voice(name.ToStringValue(), name.ToStringValue(), name.ToStringValue(), "treble", 1, gmv.ParseAsInt())
+        
+        select new Voice(name.WordToString(), transpose.ParseAsInt(),  gmv.ParseAsInt())
     );
 
     public static readonly TokenListParser<SoundSystemToken, (Voice, IMelodyGenerator)> MelodyGenerator =
@@ -108,7 +117,7 @@ public static class Parser
             from mode in Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "Major")
                 .Or(Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "Minor"))
             from intervals in IntList
-            from _nl in Token.EqualTo(SoundSystemToken.Semicolon) 
+            //from _nl in Token.EqualTo(SoundSystemToken.Semicolon) 
 
             select new ChordProgressionStateGenerator(
                 new KeyMode((Tone)Enum.Parse(typeof(Tone), note.ToStringValue(), true),
@@ -120,14 +129,30 @@ public static class Parser
 
     public static readonly TokenListParser<SoundSystemToken, MusicSystem> MusicSystemParser =
     (
-        from s in StateGenerator
-        from instruments in MelodyGenerator.ManyDelimitedBy(Token.EqualTo(SoundSystemToken.Semicolon))
+        from titleName in Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "Title")
+        from title in Token.EqualTo(SoundSystemToken.Word)
+        
+        from barsName in Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "Bars")
+        from bars in Token.EqualTo(SoundSystemToken.Integer)
 
-        select new MusicSystem(s, instruments)
+        from bpmName in Token.EqualToValueIgnoreCase(SoundSystemToken.Identifier, "BPM")
+        from bpm in Token.EqualTo(SoundSystemToken.Integer)
+        
+        from s in StateGenerator
+        from instruments in MelodyGenerator.Many()// .ManyDelimitedBy(Token.EqualTo(SoundSystemToken.Semicolon))
+
+        //from finalSemicolon in Token.EqualTo(SoundSystemToken.Semicolon).Optional()
+
+        select new MusicSystem(title.WordToString(), bars.ParseAsInt(), bpm.ParseAsInt(), s, instruments)
     );
 
     public static int ParseAsInt(this Token<SoundSystemToken> t)
     {
         return int.Parse(t.ToStringValue());
+    }
+    
+    public static string WordToString(this Token<SoundSystemToken> t)
+    {
+        return t.ToStringValue().Trim('\'');
     }
 }
