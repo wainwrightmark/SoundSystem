@@ -18,8 +18,8 @@ public sealed record KeyMode(Tone Root, Mode Mode)
         var chordType = Mode.GetChordTypes(Root)
                 .OrderByDescending(x => x.Tones.Count(tones.Contains)) //most matching notes
                 .ThenByDescending(x => tones.Contains(x.Root)) 
-                .ThenByDescending(x => tones.Contains(x.Fifth))
-                .ThenByDescending(x => tones.Contains(x.Third))
+                //.ThenByDescending(x => tones.Contains(x.Fifth))
+                //.ThenByDescending(x => tones.Contains(x.Third))
                 .ThenBy(x=>x.Tones.Count()) //Smaller chords first
             ;
 

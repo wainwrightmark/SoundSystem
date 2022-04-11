@@ -80,26 +80,13 @@ public partial record ArpeggioClusterGenerator(int Octave, bool Ascending, int M
     /// <inheritdoc />
     public Cluster Next((BarMetadata Metadata, NoteLength Baroffset, int Index) input, Maybe<Cluster> previous)
     {
-        var toneCount = input.Metadata.Chord.ToneCount;
 
         var i = input.Index % MaxHeight;
         if (!Ascending) i *= -1;
         i *= Width;
-        var octave = Octave;
-        while (i < 0)
-        {
-            i += toneCount;
-            octave--;
-        }
 
-        while (i >= toneCount)
-        {
-            i -= toneCount;
-            octave++;
-        }
-
-        var tone = input.Metadata.Chord.Tones.ElementAt(i);
-        return new Cluster(new[] { Pitch.Create(tone, octave), });
+        var pitch = input.Metadata.Chord.GetToneAtIndex(i, Octave);
+        return new Cluster(new[] { pitch });
     }
 }
 
@@ -115,9 +102,9 @@ public partial record BlockClusterGenerator(int Octave, int Skip, int Take) : IC
     {
         while (true)
         {
-            foreach (var t in chord.Tones)
+            foreach (var t in chord.GetPitches(octave))
             {
-                yield return Pitch.Create(t, octave);
+                yield return t;
             }
 
             octave++;
